@@ -41,26 +41,30 @@ creates a `<style>` node that looks like this:
 ```
 <style>
 .page {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	padding: 0;
-	margin: 0;
-	font-size: 200px;
-	text-align: center;
-	line-height: 100vh;
-	background: white;
-	-webkit-transition: left 0.5s;
-	cursor: pointer;
-	transition: left 0.5s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: 200px;
+  text-align: center;
+  line-height: 100vh;
+  background: white;
+  -webkit-transition: left 0.5s;
+  cursor: pointer;
+  transition: left 0.5s;
 }
 .page.hidden {
-	left: 100%;
+  left: 100%;
 }
 </style>
 ```
+
+# Demo 
+
+Check out the demo at https://play.celljs.org/items/glkfXy/edit
 
 # Syntax
 
