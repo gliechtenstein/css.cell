@@ -1,19 +1,41 @@
-var css = function(o, cell) {
+var css = function(o, options={}) {
+
+  var rule = function (o, selectors) {
+    var result = ""
+    Object.keys(o).forEach( function(property) {
+      if ( typeof  o[property] !== "object" ) {
+        // Convert property from camelCase to kebab-case
+        var kebab =  ( property[0].match(/[A-Z]/) ? "-" : "" ) + property.
+          replace(/([a-zA-Z])(?=[A-Z])/g, '$1-').toLowerCase()
+        result += ("\t" + kebab + ": " + o[property] + ";\n")
+      }
+    } )
+    result = result === "" ? "" : selectors.join(" ") + " {\n" + result + "\n}\n"
+    return result
+  }
+
+  var rules = function (o, selectors) {
+    var result = ""
+    if ( typeof o === "object" ) {
+      result += rule( o, selectors )
+      Object.keys(o).forEach( function( selector ) {
+        var selected = o[selector]
+        selector.split(",").forEach( function( selectorPart ) {
+          selectorPart = selectorPart.trim()
+          result += rules( selected, selectors.concat( selectorPart ) )
+        } )
+      } )
+    }
+    return result
+  }
+
   var stub = {
     $type: "style",
-    $text: Object.keys(o).map(function(selector) {
-      var output = "";
-      // 1. first line
-      output += (selector + " {\n");
-      // 2. key/values
-      var selected = o[selector];
-      for(var attr in selected)
-        output += ("\t" + attr + ": " + selected[attr] + ";\n");
-      // 2. last line
-      output += "}";
-      return output;
-    }).join("\n")
+    $text: rules( o, options.scope ? [ options.scope ] : [] )
   }
-  if (cell) { stub.$cell = true; }
+
+  if ( options.cell ) { stub.$cell = true; }
+
   return stub;
+
 }

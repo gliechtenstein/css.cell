@@ -2,6 +2,13 @@
 
 Construct CSS from JSON, powered by [cell.js](https://github.com/intercellular/cell)
 
+Nesting of objects is supported. Selectors are built
+by concatenating property names from parent objects.
+
+Property names that are given as camelCase are converted
+to kebab-case.
+
+
 # Install
 
 Just include the following script
@@ -13,64 +20,44 @@ Just include the following script
 # Usage
 
 ```
-var stylesheet = css({
-  ".page": {
-    "position": "fixed",
-    "top": "0",
-    "left": "0",
-    "width": "100%",
-    "height": "100%",
-    "padding": "0",
-    "margin": "0",
-    "font-size": "200px",
-    "text-align": "center",
-    "line-height": "100vh",
-    "background": "white",
-    "-webkit-transition": "left 0.5s",
-    "cursor": "pointer",
-    "transition": "left 0.5s"
-  },
-  ".page.hidden": {
-    "left": "100%"
-  }
-}, true)
+var stylesheet = css( {
+ '.top-section': {
+   backgroundColor: 'green',
+   h1: { color: 'red' },
+ },
+ '.middle-section' : {
+   p: { strong: { color: 'blue' } }
+ }
+}, { cell: true, scope: '#myElement' } )
 ```
 
 creates a `<style>` node that looks like this:
 
 ```
 <style>
-.page {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  font-size: 200px;
-  text-align: center;
-  line-height: 100vh;
-  background: white;
-  -webkit-transition: left 0.5s;
-  cursor: pointer;
-  transition: left 0.5s;
+#myElement .top-section {
+  background-color: green;
 }
-.page.hidden {
-  left: 100%;
+#myElement .top-section h1 {
+  color: red;
+}
+#myElement .middle-section p strong {
+  color: blue;
 }
 </style>
 ```
 
-# Demo 
+# Demo
 
 Check out the demo at https://play.celljs.org/items/glkfXy/edit
 
 # Syntax
 
 ```
-css([Style JSON], [Include $cell?])
+css([Style JSON], Options )
 ```
 
-1. The first argument is the actual JSON that represents the CSS.
-2. The second argument, when set to `true`, simply attaches `$cell: true` to the response, making sure it turns into a cell node.
+The first argument is the actual JSON that represents the CSS.
+
+options.cell: Boolean. If true, output will have `$cell: true` property.
+options.scope: String. Prepends all css selectors.
